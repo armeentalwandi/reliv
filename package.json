@@ -26,11 +26,19 @@
     "@mikro-orm/migrations": "^4.5.9",
     "@mikro-orm/postgresql": "^4.5.9",
     "@types/node": "^16.7.1",
+    "express": "^4.17.1",
     "global": "^4.4.0",
     "nodemon": "^2.0.12",
     "npm": "^7.21.0",
     "pg": "^8.7.1",
     "ts-node": "^10.2.1",
     "typescript": "^4.3.5"
+  },
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": [
+      "./src/mikro-orm.config.ts",
+      "./dist/mikro-orm.config.js"
+    ]
   }
 }
