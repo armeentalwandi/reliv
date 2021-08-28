@@ -1,0 +1,143 @@
+import { Resolver,  Mutation, Arg, InputType, Field, Ctx, ObjectType } from "type-graphql";
+import { MyContext } from "../types";
+import { User } from "../entities/User";
+import argon2 from "argon2";
+//import { constraintDirective, constraintDirectiveTypeDefs } from "graphql-constraint-directive";
+
+const { constraintDirective, constraintDirectiveTypeDefs } = require('graphql-constraint-directive')
+
+
+@InputType()
+class UsernamePasswordEmailInput {
+    @Field()
+    username: string
+    @Field()
+    password: string
+    @Field()
+    email: string 
+
+}
+
+@InputType() 
+class UsernamePassword {
+    @Field()
+    username: string
+    @Field()
+    password: string
+}
+
+@ObjectType()
+class Error { // sends a message if there's something wrong w/ a particular field
+    @Field()
+    field: string; // gives field
+    
+    @Field()
+    message: string; // gives message as disclaimer
+
+}
+@ObjectType() //input types can be used as arguments while object type can be returned from mutations
+class UserResponse { // either returns errors or user if it worked properly
+    @Field(() => [Error], {nullable: true}) // returns error or null
+    errors?: Error[];
+
+    @Field(() => User, {nullable: true}) // returns user or null
+    user?: User;
+
+}
+
+
+@Resolver()
+export class UserResolver {
+    
+    @Mutation(() => UserResponse)   
+    async register(
+        @Arg('options') options: UsernamePasswordEmailInput,
+        @Ctx() { em } : MyContext
+    ): Promise<UserResponse> {
+        if (options.username.length <= 2) {
+            return {
+                errors: [{
+                    field: "username",
+                    message: "username length must be greater than 2",
+
+                },
+            ],
+            };
+        }
+        if (options.password.length <= 6) {
+            return {
+                errors: [{
+                    field: "password",
+                    message: "username length must be greater than 6",
+
+                },
+            ],
+            };
+        }
+        const hashedPass = await argon2.hash(options.password); // hashing the pass before storing
+        //storing in database: username and password from input
+        const user = em.create(User, 
+            { username: options.username, 
+                password: hashedPass, 
+                email: options.email});
+        try {
+            await em.persistAndFlush(user);
+        } catch(err) {
+            // error code 23505 = duplicate username/that username already exists
+            if (err.code === "23505" || err.detail.includes("already exists")) {
+                // duplicate username error
+                return {
+                    errors: [
+                    {
+                        field: "username",
+                        message: "username or email already taken"
+
+                    },
+                    ],
+                };
+            }
+        }
+        return { user }; // because we now have a response object
+    }
+
+
+    //login
+    @Mutation(() => UserResponse)
+    async login(
+        @Arg("options") options: UsernamePassword,
+        @Ctx() { em, req }: MyContext
+    ): Promise<UserResponse> { // look up the user by the username
+        const user = await em.findOne(User, {username: options.username} );
+        if (!user) { // if user is not found
+            return {
+                errors: [{
+                    field: "username",
+                    message: "Username inputted doesn't exist. Please input the correct one.",
+                },
+            ],
+        };
+    }
+
+    // checks if the password matches to the registered one
+    const valid = await argon2.verify(user.password, options.password);
+    if (!valid) {
+        return {
+            errors: [
+                {
+                    field: "password",
+                    message: "incorrect password",
+                },
+            ],
+        };
+    }
+
+   req.session.userId = user._id; 
+
+    // if the user exits and the password matches, return user
+    return {
+        user, 
+    }; 
+}
+}
+
+

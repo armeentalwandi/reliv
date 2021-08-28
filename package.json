@@ -7,7 +7,8 @@
     "watch": "tsc -w",
     "dev": "nodemon dist/index.js",
     "start": "node dist/index.js",
-    "dev2": "nodemon --exec ts-node src/index.ts"
+    "dev2": "nodemon --exec ts-node src/index.ts",
+    "create:migration": "mikro-orm migration:create"
   },
   "repository": {
     "type": "git",
@@ -27,12 +28,17 @@
     "@mikro-orm/postgresql": "^4.5.9",
     "@types/node": "^16.7.1",
     "apollo-server-express": "^3.3.0",
+    "argon2": "^0.28.2",
+    "connect-redis": "^6.0.0",
     "express": "^4.17.1",
+    "express-session": "^1.17.2",
     "global": "^4.4.0",
     "graphql": "^15.5.1",
+    "graphql-constraint-directive": "^2.1.1",
     "nodemon": "^2.0.12",
     "npm": "^7.21.0",
     "pg": "^8.7.1",
+    "redis": "^3.1.2",
     "ts-node": "^10.2.1",
     "type-graphql": "^1.1.1",
     "typescript": "^4.3.5"
@@ -45,6 +51,9 @@
     ]
   },
   "devDependencies": {
-    "@types/express": "^4.17.13"
+    "@types/connect-redis": "0.0.17",
+    "@types/express": "^4.17.13",
+    "@types/express-session": "^1.17.0",
+    "@types/redis": "^2.8.31"
   }
 }
