@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Formik } from 'formik';
 import { FormControl, FormLabel, FormErrorMessage, Input, Box, Button, Heading } from "@chakra-ui/react";
-import { valueScaleCorrection } from 'framer-motion/types/render/dom/projection/scale-correction';
+//import { valueScaleCorrection } from 'framer-motion/types/render/dom/projection/scale-correction';
 import Wrapper from '../components/Wrapper';
 import InputField from '../components/inputField';
 
