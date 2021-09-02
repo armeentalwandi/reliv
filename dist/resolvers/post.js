@@ -28,6 +28,7 @@ __decorate([
 PostInput = __decorate([
     (0, type_graphql_1.InputType)()
 ], PostInput);
+;
 let PostResolver = class PostResolver {
     async posts() {
         return Post_1.Post.find();
@@ -35,8 +36,11 @@ let PostResolver = class PostResolver {
     post(_id) {
         return Post_1.Post.findOne(_id);
     }
-    async createPost(title) {
-        return Post_1.Post.create({ title }).save();
+    async createPost(input, { req }) {
+        if (!req.session.userId) {
+            throw new Error('not authenticated!');
+        }
+        return Post_1.Post.create(Object.assign(Object.assign({}, input), { creatorId: req.session.userId })).save();
     }
     async updatePost(_id, title) {
         const post = await Post_1.Post.findOne(_id);
@@ -61,16 +65,17 @@ __decorate([
 ], PostResolver.prototype, "posts", null);
 __decorate([
     (0, type_graphql_1.Query)(() => Post_1.Post, { nullable: true }),
-    __param(0, (0, type_graphql_1.Arg)("_id", () => type_graphql_1.Int)),
+    __param(0, (0, type_graphql_1.Arg)("_id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], PostResolver.prototype, "post", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => Post_1.Post),
-    __param(0, (0, type_graphql_1.Arg)("title")),
+    __param(0, (0, type_graphql_1.Arg)("input")),
+    __param(1, (0, type_graphql_1.Ctx)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [PostInput, Object]),
     __metadata("design:returntype", Promise)
 ], PostResolver.prototype, "createPost", null);
 __decorate([

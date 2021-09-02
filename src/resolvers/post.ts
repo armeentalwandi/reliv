@@ -1,4 +1,4 @@
-import { isAuth } from "src/middleware/isAuth";
+import {isAuth} from "src/middleware/isAuth";
 import { Resolver, Query, Ctx, Arg, Int, Mutation, Field, UseMiddleware, InputType } from "type-graphql";
 import { Post } from "../entities/Post";
 import { MyContext } from "../types";
@@ -6,13 +6,12 @@ import { MyContext } from "../types";
 @InputType()
 class PostInput {
     @Field()
-    title:string
-    
+    title:string;
     @Field()
     text: string
 }
 
-
+;
 @Resolver()
 export class PostResolver {
     // adds a query
@@ -26,15 +25,22 @@ export class PostResolver {
 
     @Query(() => Post, {nullable: true}) // query by id and graphQl will return post or null
     post( 
-        @Arg("_id", () => Int) _id: number): Promise<Post | undefined> {
+        @Arg("_id") _id: number): Promise<Post | undefined> {
         return Post.findOne(_id); // queries posts where id = ...
     }
 
     @Mutation(() => Post) // query is for getting data and mutation is for changing  
-    //@UseMiddleware(isAuth)
+    //@UseMiddleware(isAuth) this isnt working why??
     async createPost( 
-        @Arg("title") title: string): Promise<Post> {
-        return Post.create({title}).save();
+        @Arg("input") input: PostInput,
+        @Ctx() {req}: MyContext): Promise<Post> {
+            if (!req.session.userId) {
+                throw new Error('not authenticated!')
+            }
+        return Post.create({
+            ...input, 
+            creatorId: req.session.userId,
+        }).save();
     }
 
     @Mutation(() => Post, {nullable: true}) // query is for getting data and mutation is for changing  
@@ -53,7 +59,7 @@ export class PostResolver {
             Post.update({_id}, {title}); 
         }
         
-        return post
+        return post;
 
     }
 
