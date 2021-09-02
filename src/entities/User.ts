@@ -1,33 +1,46 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { 
+  Entity, 
+  OneToMany, 
+  BaseEntity, 
+  PrimaryGeneratedColumn, 
+  Column, 
+  CreateDateColumn, 
+  UpdateDateColumn } from "typeorm";
 import { ObjectType, Field } from "type-graphql";
+import { Post } from "./Post";
 
 // 4 columns in database table - create migration 
 @ObjectType() // changing entity to GraphQL type
 @Entity()  
-export class User {
+export class User extends BaseEntity {
 
   @Field() // exposing the graphQL schema
-  @PrimaryKey()
+  @PrimaryGeneratedColumn()
   _id!: number;
 
-  @Field(() => String) // without @Field, you can't query based on createdAt
-  @Property({type: "date"})
-  createdAt = new Date();
-
-  @Field(() => String)
-  @Property({ type:"date", onUpdate: () => new Date() })
-  updatedAt = new Date();
-
   @Field()
-  @Property({type: 'text', unique: true})
+  @Column({unique: true})
   username!: string;
 
+  
   // no field property because we don't want to be able to query this 
   //  for security purposes. Also hashed to increase security
-  @Property({type: 'text'})
+  @Column()
   password!: string;
 
+  @OneToMany(() => Post, (post) => post.creator )
+  posts: Post[];
+   
   @Field()
-  @Property({type: 'text', unique: true})
-  email!: string; 
+  @Column({unique: true})
+  email!: string;
+
+  @Field(() => String) // without @Field, you can't query based on createdAt
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Field(() => String)
+  @UpdateDateColumn()
+  updatedAt: Date;
+
 }

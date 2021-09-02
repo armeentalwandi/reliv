@@ -3,6 +3,8 @@ import { MyContext } from "../types";
 import { User } from "../entities/User";
 import argon2 from "argon2";
 import { sendEmail } from "../utils/sendEmail";
+import { getConnection } from "typeorm";
+//import { execute } from "graphql/execution";
 //import { constraintDirective, constraintDirectiveTypeDefs } from "graphql-constraint-directive";
 
 const { constraintDirective, constraintDirectiveTypeDefs } = require('graphql-constraint-directive')
@@ -54,9 +56,9 @@ export class UserResolver {
     @Mutation(() => Boolean)
     async forgotPassword(
         @Arg('email') email: string, // we are going to take email from the user
-        @Ctx() {em}: MyContext // if we have the user in the database
+        @Ctx() {}: MyContext // if we have the user in the database
     ) {
-        const user = await em.findOne(User, {email});
+        const user = await User.findOne({where: {email}});
         if (!user) {
             return true;
         }
@@ -66,19 +68,19 @@ export class UserResolver {
     }
 
     @Query(() => User, { nullable: true})
-    async me(@Ctx() { req, em }: MyContext) {
+    me(@Ctx() { req}: MyContext) {
         if (!req.session.userId) {
             return null;
         }
 
-        const user = await em.findOne(User, { _id: req.session.userId});
-        return user;
+        return User.findOne(req.session.userId);
+
     }
     
     @Mutation(() => UserResponse)   
     async register(
         @Arg('options') options: UsernamePasswordEmailInput,
-        @Ctx() { req, em } : MyContext
+        @Ctx() { req} : MyContext
     ): Promise<UserResponse> {
         if (!options.email.includes('@')) {
             return {
@@ -112,12 +114,23 @@ export class UserResolver {
         }
         const hashedPass = await argon2.hash(options.password); // hashing the pass before storing
         //storing in database: username and password from input
-        const user = em.create(User, 
-            { username: options.username, 
-                password: hashedPass, 
-                email: options.email});
+
+        let user;
         try {
-            await em.persistAndFlush(user);
+            const result = await getConnection()
+            .createQueryBuilder()
+            .insert()
+            .into(User).values(
+                {
+                    username: options.username, 
+                    password: hashedPass, 
+                    email: options.email
+                }
+            )
+            .returning('*')
+            .execute();
+            //console.log("result: ", result);
+            user = result.raw[0];
         } catch(err) {
             // error code 23505 = duplicate username/that username already exists
             if (err.code === "23505" || err.detail.includes("already exists")) {
@@ -143,9 +156,9 @@ export class UserResolver {
     @Mutation(() => UserResponse)
     async login(
         @Arg("options") options: UsernamePassword,
-        @Ctx() { em, req }: MyContext
+        @Ctx() { req }: MyContext
     ): Promise<UserResponse> { // look up the user by the username
-        const user = await em.findOne(User, {username: options.username} );
+        const user = await User.findOne({where: {username: options.username}});
         if (!user) { // if user is not found
             return {
                 errors: [{

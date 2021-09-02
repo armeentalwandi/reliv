@@ -20,6 +20,7 @@ const type_graphql_1 = require("type-graphql");
 const User_1 = require("../entities/User");
 const argon2_1 = __importDefault(require("argon2"));
 const sendEmail_1 = require("../utils/sendEmail");
+const typeorm_1 = require("typeorm");
 const { constraintDirective, constraintDirectiveTypeDefs } = require('graphql-constraint-directive');
 let UsernamePasswordEmailInput = class UsernamePasswordEmailInput {
 };
@@ -78,22 +79,21 @@ UserResponse = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], UserResponse);
 let UserResolver = class UserResolver {
-    async forgotPassword(email, { em }) {
-        const user = await em.findOne(User_1.User, { email });
+    async forgotPassword(email, {}) {
+        const user = await User_1.User.findOne({ where: { email } });
         if (!user) {
             return true;
         }
         await (0, sendEmail_1.sendEmail)(email, '<h1>You have forgotten your password. Better luck next time.</h1>');
         return true;
     }
-    async me({ req, em }) {
+    me({ req }) {
         if (!req.session.userId) {
             return null;
         }
-        const user = await em.findOne(User_1.User, { _id: req.session.userId });
-        return user;
+        return User_1.User.findOne(req.session.userId);
     }
-    async register(options, { req, em }) {
+    async register(options, { req }) {
         if (!options.email.includes('@')) {
             return {
                 errors: [{
@@ -122,11 +122,19 @@ let UserResolver = class UserResolver {
             };
         }
         const hashedPass = await argon2_1.default.hash(options.password);
-        const user = em.create(User_1.User, { username: options.username,
-            password: hashedPass,
-            email: options.email });
+        let user;
         try {
-            await em.persistAndFlush(user);
+            const result = await (0, typeorm_1.getConnection)()
+                .createQueryBuilder()
+                .insert()
+                .into(User_1.User).values({
+                username: options.username,
+                password: hashedPass,
+                email: options.email
+            })
+                .returning('*')
+                .execute();
+            user = result.raw[0];
         }
         catch (err) {
             if (err.code === "23505" || err.detail.includes("already exists")) {
@@ -143,8 +151,8 @@ let UserResolver = class UserResolver {
         req.session.userId = user._id;
         return { user };
     }
-    async login(options, { em, req }) {
-        const user = await em.findOne(User_1.User, { username: options.username });
+    async login(options, { req }) {
+        const user = await User_1.User.findOne({ where: { username: options.username } });
         if (!user) {
             return {
                 errors: [{
@@ -195,7 +203,7 @@ __decorate([
     __param(0, (0, type_graphql_1.Ctx)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
+    __metadata("design:returntype", void 0)
 ], UserResolver.prototype, "me", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => UserResponse),

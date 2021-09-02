@@ -1,7 +1,4 @@
-import "reflect-metadata";
-import {MikroORM} from "@mikro-orm/core";
-//import { Post } from "./entities/Post";
-import microConfig from "./mikro-orm.config"; 
+import "reflect-metadata"; 
 import express from 'express';
 import {ApolloServer} from 'apollo-server-express';
 import {buildSchema} from 'type-graphql';
@@ -15,14 +12,26 @@ import { prod } from "./constants";
 import { MyContext } from "./types";
 import cors from 'cors';
 import { truncate } from "lodash";
-//import { sendEmail } from "./utils/sendEmail";
+import { createConnection } from "typeorm";
+import { Post } from "./entities/Post";
+import { User } from "./entities/User";
+import { truncateSync } from "fs";
 
 
 
 const main = async () => {
-  //sendEmail('neha@gmail.com', 'Welcome to Reliv!');
-  const orm = await MikroORM.init(microConfig); // returns a promise
-  await orm.getMigrator().up(); 
+  
+  const conn = await createConnection ({
+    type: 'postgres',
+    database: 'reliv2',
+    username: 'postgres',
+    password: 'postgres',
+    logging: true,
+    synchronize: true,
+    entities: [Post, User],
+  });
+  
+
 
   const app = express();
   const RedisStore = connectRedis(session);
@@ -63,7 +72,7 @@ const apolloServer = new ApolloServer ({
     resolvers: [HelloResolver, PostResolver, UserResolver],
     validate: false
   }),
-  context: ({req, res}) => ({ em: orm.em, req, res}) // function that returns an object for the context 
+  context: ({req, res}) => ({ req, res}) // function that returns an object for the context 
                                   // and is shared by all resolvers 
 });
 
