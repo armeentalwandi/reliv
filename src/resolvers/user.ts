@@ -1,7 +1,8 @@
-import { Resolver,  Mutation, Arg, InputType, Field, Ctx, ObjectType } from "type-graphql";
+import { Resolver,  Mutation, Arg, InputType, Field, Ctx, ObjectType, Query } from "type-graphql";
 import { MyContext } from "../types";
 import { User } from "../entities/User";
 import argon2 from "argon2";
+import { sendEmail } from "../utils/sendEmail";
 //import { constraintDirective, constraintDirectiveTypeDefs } from "graphql-constraint-directive";
 
 const { constraintDirective, constraintDirectiveTypeDefs } = require('graphql-constraint-directive')
@@ -14,7 +15,7 @@ class UsernamePasswordEmailInput {
     @Field()
     password: string
     @Field()
-    email: string 
+    email: string
 
 }
 
@@ -46,14 +47,49 @@ class UserResponse { // either returns errors or user if it worked properly
 }
 
 
+
 @Resolver()
 export class UserResolver {
+
+    @Mutation(() => Boolean)
+    async forgotPassword(
+        @Arg('email') email: string, // we are going to take email from the user
+        @Ctx() {em}: MyContext // if we have the user in the database
+    ) {
+        const user = await em.findOne(User, {email});
+        if (!user) {
+            return true;
+        }
+
+        await sendEmail(email,'<h1>You have forgotten your password. Better luck next time.</h1>');
+        return true;  
+    }
+
+    @Query(() => User, { nullable: true})
+    async me(@Ctx() { req, em }: MyContext) {
+        if (!req.session.userId) {
+            return null;
+        }
+
+        const user = await em.findOne(User, { _id: req.session.userId});
+        return user;
+    }
     
     @Mutation(() => UserResponse)   
     async register(
         @Arg('options') options: UsernamePasswordEmailInput,
-        @Ctx() { em } : MyContext
+        @Ctx() { req, em } : MyContext
     ): Promise<UserResponse> {
+        if (!options.email.includes('@')) {
+            return {
+                errors: [{
+                    field: "email",
+                    message: "invalid email",
+
+                },
+            ],
+            };
+        }
         if (options.username.length <= 2) {
             return {
                 errors: [{
@@ -68,7 +104,7 @@ export class UserResolver {
             return {
                 errors: [{
                     field: "password",
-                    message: "username length must be greater than 6",
+                    message: "password length  must be greater than 6",
 
                 },
             ],
@@ -97,6 +133,8 @@ export class UserResolver {
                 };
             }
         }
+
+        req.session.userId = user._id;
         return { user }; // because we now have a response object
     }
 
@@ -138,6 +176,24 @@ export class UserResolver {
         user, 
     }; 
 }
+
+@Mutation(() => Boolean) 
+    logout(
+        @Ctx() {req, res}: MyContext
+    ) {
+        
+        return new Promise((resolve) => req.session.destroy((err) => {
+            res.clearCookie('qid'); // clear cookie on logout
+            if (err) {
+                console.log(err);
+                resolve(false);
+                return;
+            }
+            resolve(true);
+        })    
+        );  // destroy removes session from redis ->we're using redis for session cache
+    }
+
 }
 
 
