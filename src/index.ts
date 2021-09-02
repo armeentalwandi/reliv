@@ -7,7 +7,7 @@ import {ApolloServer} from 'apollo-server-express';
 import {buildSchema} from 'type-graphql';
 import { HelloResolver } from "./resolvers/hello";
 import { PostResolver } from "./resolvers/post";
-import { UserResolver } from "./resolvers/user";
+import {UserResolver} from "./resolvers/user";
 import redis from 'redis';
 import session from 'express-session';
 import connectRedis from 'connect-redis'
@@ -15,11 +15,12 @@ import { prod } from "./constants";
 import { MyContext } from "./types";
 import cors from 'cors';
 import { truncate } from "lodash";
+//import { sendEmail } from "./utils/sendEmail";
 
 
 
 const main = async () => {
-    
+  //sendEmail('neha@gmail.com', 'Welcome to Reliv!');
   const orm = await MikroORM.init(microConfig); // returns a promise
   await orm.getMigrator().up(); 
 
@@ -43,7 +44,7 @@ const main = async () => {
         cookie: {
           maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
           httpOnly: true,
-          sameSite: 'none', // predicting crsf
+          sameSite: 'lax', // predicting crsf
           secure: false,// cookie only works in https
         },
       saveUninitialized: false,

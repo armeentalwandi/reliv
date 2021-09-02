@@ -1,34 +1,37 @@
 import React from 'react';
 import { Form, Formik } from 'formik';
-import { Box, Button, Heading } from "@chakra-ui/react";
+import { FormControl, FormLabel, FormErrorMessage, Input, Box, Button, Heading, Link, Flex } from "@chakra-ui/react";
+import { valueScaleCorrection } from 'framer-motion/types/render/dom/projection/scale-correction';
 import {Wrapper} from '../components/Wrapper';
 import {InputField} from '../components/inputField';
-import {useRegisterMutation} from '../generated/graphql';
+import {useMutation}  from 'urql';
+import {useLoginMutation} from '../generated/graphql';
 import { toErrorMap } from '../utils/toErrorMap';
 import { useRouter } from 'next/router';
 import { withUrqlClient } from 'next-urql';
 import { createUrqlClient } from '../utils/createUrqlClient';
+import NextLink from 'next/link';
 
 
-interface registerProps {}
 
 
-const Register: React.FC<registerProps> = ({}) => {
-    const router = useRouter(); // so we can go to another page if registration
 
-    const [,register] = useRegisterMutation();
+const Login: React.FC<{}> = ({}) => {
+    const router = useRouter(); // so we can go to another page if registration successful
+
+    const [,login] = useLoginMutation();
     return (
         // formik helps with handling form submissions and validating imputs
 
         // saving the form's initial values
         // Wrapper changes the size of the text field
         <Wrapper variant='small'>
-            <Formik initialValues={{username: "", password: "", email:""}} onSubmit={async (values, {setErrors}) => {
+            <Formik initialValues={{username: "", password: ""}} onSubmit={async (values, {setErrors}) => {
             console.log(values); // this logs the values submitted in the form (username, password)
-            const response = await register(values);
-            if (response.data?.register.errors) {
-                setErrors(toErrorMap(response.data.register.errors));
-            } else if (response.data?.register.user) { //optional chain
+            const response = await login({options: values});
+            if (response.data?.login.errors) {
+                setErrors(toErrorMap(response.data.login.errors));
+            } else if (response.data?.login.user) { //optional chain
                 // worked
                 router.push("/"); // goes back to the home page if it worked
             }
@@ -36,17 +39,21 @@ const Register: React.FC<registerProps> = ({}) => {
             {({ isSubmitting }) =>(
                 <Form>
                     <Box textAlign="center">
-                        <Heading>Register</Heading>
+                        <Heading>Login</Heading>
                     </Box>
                     <InputField name="username" placeholder="username" label="Username"/>
                     <Box mt={2}>
                         <InputField name="password" placeholder="password" label="Password" type="password"/>
                     </Box>
-                    <Box mt={2}>
-                        <InputField name="email" placeholder="email@gmail.com" label="Email" type="email"/>
-                    </Box>
                     
-                    <Button mt={3} type="submit" isLoading={isSubmitting} colorScheme="blue">Register</Button>
+                    <Flex mt={2}>
+                        <NextLink href="/forgot-password">
+                            <Link ml='auto' color='black'>forgot password?</Link>
+                            
+                        </NextLink>
+                    </Flex>
+                    
+                    <Button mt={3} type="submit" isLoading={isSubmitting} colorScheme="blue">Login</Button>
                     
                 </Form>
 
@@ -58,5 +65,5 @@ const Register: React.FC<registerProps> = ({}) => {
         
     );
 };
-export default withUrqlClient(createUrqlClient)(Register);
+export default withUrqlClient(createUrqlClient)(Login);
 
