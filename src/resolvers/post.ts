@@ -1,6 +1,17 @@
-import { Resolver, Query, Ctx, Arg, Int, Mutation } from "type-graphql";
+import { isAuth } from "src/middleware/isAuth";
+import { Resolver, Query, Ctx, Arg, Int, Mutation, Field, UseMiddleware, InputType } from "type-graphql";
 import { Post } from "../entities/Post";
 import { MyContext } from "../types";
+
+@InputType()
+class PostInput {
+    @Field()
+    title:string
+    
+    @Field()
+    text: string
+}
+
 
 @Resolver()
 export class PostResolver {
@@ -8,44 +19,38 @@ export class PostResolver {
     @Query(() => [Post]) //query returns a array of posts
 
     // returns posts as Promise
-    posts(@Ctx() { em }: MyContext): Promise<Post[]> {
-        return em.find(Post, {});
+    async posts(): Promise<Post[]> {
+        return Post.find();
     }
 
 
     @Query(() => Post, {nullable: true}) // query by id and graphQl will return post or null
     post( 
-        @Arg("_id", () => Int) _id: number, 
-        @Ctx() { em }: MyContext
-    ): Promise<Post | null> {
-        return em.findOne(Post, { _id }); // queries posts where id = ...
+        @Arg("_id", () => Int) _id: number): Promise<Post | undefined> {
+        return Post.findOne(_id); // queries posts where id = ...
     }
 
     @Mutation(() => Post) // query is for getting data and mutation is for changing  
+    //@UseMiddleware(isAuth)
     async createPost( 
-        @Arg("title") title: string, 
-        @Ctx() { em }: MyContext
-    ): Promise<Post> {
-        const post = em.create(Post, {title}); // creates a post 
-        await em.persistAndFlush(post);
-        return post;
+        @Arg("title") title: string): Promise<Post> {
+        return Post.create({title}).save();
     }
 
     @Mutation(() => Post, {nullable: true}) // query is for getting data and mutation is for changing  
     async updatePost( 
         @Arg("_id") _id: number, 
-        @Arg("title", () => String, { nullable: true }) title: string, 
-        @Ctx() { em }: MyContext
+        @Arg("title", () => String, { nullable: true }) title: string 
+        
     ): Promise<Post | null> {
-        const post = await em.findOne(Post, {_id}); // updates post based on id by getting it
+        const post = await Post.findOne(_id); // updates post based on id by getting it
         if (!post) {
             return null
         }
 
         // updates only if they gave a title name
         if (typeof title !== "undefined") {
-            post.title = title;
-            await em.persistAndFlush(post);
+            Post.update({_id}, {title}); 
         }
         
         return post
@@ -55,12 +60,9 @@ export class PostResolver {
 
     @Mutation(() => Boolean)  
     async deletePost( 
-        @Arg("_id") _id: number, 
-        @Ctx() { em }: MyContext
-    ): Promise<boolean> {
-
-        await em.nativeDelete(Post, { _id});
-        return true;
+        @Arg("_id") _id: number): Promise<boolean> {
+            await Post.delete(_id);
+            return true;
 
     }
     
