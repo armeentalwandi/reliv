@@ -22,7 +22,6 @@ export class PostResolver {
         return Post.find();
     }
 
-
     @Query(() => Post, {nullable: true}) // query by id and graphQl will return post or null
     post( 
         @Arg("_id") _id: number): Promise<Post | undefined> {
