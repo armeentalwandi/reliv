@@ -44,8 +44,6 @@ export class Post extends BaseEntity {
   @Field(() => String)
   @UpdateDateColumn()
   updatedAt: Date;
-
-  
   // set up which user created the post using many to one relationship
   // we are switching to typeORM because of this
 }

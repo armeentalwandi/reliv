@@ -8,4 +8,5 @@ mutation CreatePost($input: PostInput!) {
         points
         creatorId
     }
+}
 
