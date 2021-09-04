@@ -29,7 +29,6 @@ __decorate([
 PostInput = __decorate([
     (0, type_graphql_1.InputType)()
 ], PostInput);
-;
 let PostResolver = class PostResolver {
     async posts(limit, cursor) {
         const realLimit = Math.min(50, limit);
