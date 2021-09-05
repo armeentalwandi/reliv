@@ -8,11 +8,11 @@ import {Box, Button, Flex, Heading, Stack, Text} from '@chakra-ui/react';
 import React, { useState } from "react";
 
 const Index = () => {
-    const [variables, setVariables] = useState({limit: 5, cursor: null as null | string})
+    const [variables, setVariables] = useState({limit: 4, cursor: null as null | string})
     const [{data, fetching}] = usePostsQuery({
         variables,
     }); 
-
+    
     if (!fetching && !data) {
         return <div> Make a post! </div>
     }
@@ -30,7 +30,7 @@ const Index = () => {
        {!data && fetching ? (<div>Loading Posts ...</div>)
        : (
            <Stack spacing={10} >
-           {data!.posts.map((p) => (
+           {data!.posts.posts.map((p) => (
                  <Box key={p._id} p={5}  shadow="md"
                  borderWidth="1px">
                  <Heading fontSize="xl">{p.title}</Heading>
@@ -39,11 +39,11 @@ const Index = () => {
                </Box>))}
            </Stack>
        )} 
-      {data ? (<Flex>
+      {data && data.posts.hasMore ? (<Flex>
        <Button onClick={() => {
            setVariables({
-               limit: variables.limit, 
-               cursor: data.posts[data.posts.length - 1].createdAt
+               limit: variables?.limit, 
+               cursor: data.posts.posts[data.posts.posts.length - 1].createdAt
            });
         }}
            isLoading={fetching} my={8} m='auto'> Load more </Button>

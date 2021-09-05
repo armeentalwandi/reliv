@@ -29,18 +29,33 @@ __decorate([
 PostInput = __decorate([
     (0, type_graphql_1.InputType)()
 ], PostInput);
+let PaginatedPosts = class PaginatedPosts {
+};
+__decorate([
+    (0, type_graphql_1.Field)(() => [Post_1.Post]),
+    __metadata("design:type", Array)
+], PaginatedPosts.prototype, "posts", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Boolean)
+], PaginatedPosts.prototype, "hasMore", void 0);
+PaginatedPosts = __decorate([
+    (0, type_graphql_1.ObjectType)()
+], PaginatedPosts);
 let PostResolver = class PostResolver {
     async posts(limit, cursor) {
         const realLimit = Math.min(50, limit);
+        const realLimitPlusOne = realLimit + 1;
         const qb = (0, typeorm_1.getConnection)()
             .getRepository(Post_1.Post)
             .createQueryBuilder("p")
             .orderBy('"createdAt"', "DESC")
-            .take(realLimit);
+            .take(realLimitPlusOne);
         if (cursor) {
             qb.where('"createdAt"  < :cursor', { cursor: new Date(parseInt(cursor)), });
         }
-        return qb.getMany();
+        const posts = await qb.getMany();
+        return { posts: posts.slice(0, realLimit), hasMore: posts.length == realLimitPlusOne, };
     }
     post(_id) {
         return Post_1.Post.findOne(_id);
@@ -67,7 +82,7 @@ let PostResolver = class PostResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Query)(() => [Post_1.Post]),
+    (0, type_graphql_1.Query)(() => PaginatedPosts),
     __param(0, (0, type_graphql_1.Arg)('limit', () => type_graphql_1.Int)),
     __param(1, (0, type_graphql_1.Arg)('cursor', () => String, { nullable: true })),
     __metadata("design:type", Function),
