@@ -1,4 +1,4 @@
-import { Resolver,  Mutation, Arg, InputType, Field, Ctx, ObjectType, Query } from "type-graphql";
+import { Resolver,  Mutation, Arg, InputType, Field, Ctx, ObjectType, Query, Root, FieldResolver } from "type-graphql";
 import { MyContext } from "../types";
 import { User } from "../entities/User";
 import argon2 from "argon2";
@@ -50,8 +50,21 @@ class UserResponse { // either returns errors or user if it worked properly
 
 
 
-@Resolver()
+@Resolver(User)
 export class UserResolver {
+
+    // hides the email from an user that has not created post and is looking for the email
+    @FieldResolver(() => String)
+    email(@Root() user: User, @Ctx() {req}: MyContext) {
+        
+        // this is the current user and its ok to show them their own email
+        if (req.session.userId === user._id) {
+            return user.email;
+        }
+        return "";
+
+        // the current user and wants to see someone else's post's email
+    }
 
     @Mutation(() => Boolean)
     async forgotPassword(
@@ -67,9 +80,12 @@ export class UserResolver {
         return true;  
     }
 
-    @Query(() => User, { nullable: true})
-    me(@Ctx() { req}: MyContext) {
+    @Query(() => User, { nullable: true })
+    me(@Ctx() { req }: MyContext) {
+
+        //you are not logged in
         if (!req.session.userId) {
+            console.log(req.session.userId);
             return null;
         }
 

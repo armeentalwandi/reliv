@@ -1,19 +1,13 @@
 import React, { useEffect } from 'react';
-import {ReactNode, useRef} from 'react';
-import { Wrapper } from '../components/Wrapper';
 import { Formik, Form } from 'formik';
 import login from './login';
-import { toErrorMap } from "../utils/toErrorMap";
 import { InputField } from "../components/inputField";
-import { Box, Button, FormControl, FormErrorMessage, FormLabel, Icon, InputGroup, Textarea } from "@chakra-ui/react";
-import { FiFile } from 'react-icons/fi';
-import { useForm, UseFormRegisterReturn } from 'react-hook-form';
+import { Box, Button, Textarea } from "@chakra-ui/react";
 import { useCreatePostMutation, useMeQuery } from "../generated/graphql";
 import { useRouter } from 'next/router';
 import { createUrqlClient } from '../utils/createUrqlClient';
 import { withUrqlClient } from 'next-urql';
 import { Layout } from '../components/Layout';
-import Router from 'next/router';
 import { useIsAuth } from '../utils/useIsAuth';
 
 
@@ -39,11 +33,11 @@ const CreatePost: React.FC<{}> = ({}) => {
                 <Form>
                     <InputField name="title" placeholder="title" label="Title"/>
                     <Box mt={4}>
-                        <Textarea name="text" placeholder="text..." label="Body"/>
+                        <InputField textarea name="text" placeholder="text..." label="Body"/>
                     </Box>
-                    <Box mt={4}>
+                    {/* <Box mt={4}>
                         <InputField name="photo" placeholder="Photo" type="File" label="Photo"/>
-                    </Box>
+                    </Box> */}
                     <Button mt={4} type="submit" isLoading={isSubmitting} colorScheme="blue">Create Post</Button>
                     
                 </Form>

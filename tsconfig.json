@@ -20,6 +20,8 @@
     "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    //"allowJs": true,
+    //"js/ts.implicitProjectConfig.experimentalDecorators": true,
     "resolveJsonModule": true,
     "baseUrl": "."
   },
