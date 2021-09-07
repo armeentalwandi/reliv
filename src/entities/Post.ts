@@ -6,7 +6,9 @@ import {
   PrimaryGeneratedColumn, 
   Column, 
   CreateDateColumn, 
-  UpdateDateColumn } from "typeorm";
+  UpdateDateColumn, 
+  OneToMany} from "typeorm";
+import { Updoot } from "./Updoot";
 import { User } from "./User";
 
 // 4 columns in database table : id, createdAt, updatedAt, and title
@@ -34,8 +36,12 @@ export class Post extends BaseEntity {
   @Column()
   creatorId: number; 
 
+  @Field()
   @ManyToOne(() => User, user => user.posts)  //set up foreign key to users table
   creator: User; 
+
+  @OneToMany(() => Updoot, (updoot) => updoot.post)
+  updoots: Updoot[];
 
   @Field(() => String) // without @Field, you can't query based on createdAt
   @CreateDateColumn()
