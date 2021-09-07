@@ -18,7 +18,7 @@ import { User } from "./entities/User";
 import { truncateSync } from "fs";
 import path from "path";
 
-//wassup shordy
+
 const main = async () => {
   
   const conn = await createConnection ({
@@ -33,7 +33,7 @@ const main = async () => {
   });
   
   await conn.runMigrations();
-
+ 
 
   const app = express();
   const RedisStore = connectRedis(session);

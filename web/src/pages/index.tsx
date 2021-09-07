@@ -4,26 +4,51 @@ import { withUrqlClient} from 'next-urql'
 import { usePostsQuery } from "../generated/graphql";
 import { Layout } from "../components/Layout";
 import NextLink from "next/link";
-import {Box, Button, Flex, Link} from '@chakra-ui/react';
+import {Box, Button, Flex, Heading, Stack, Text} from '@chakra-ui/react';
+import React, { useState } from "react";
 
 const Index = () => {
-    const [{data}] = usePostsQuery({
-        variables: {
-            limit: 10, 
-        },
+    const [variables, setVariables] = useState({limit: 4, cursor: null as null | string})
+    const [{data, fetching}] = usePostsQuery({
+        variables,
     }); 
+    
+    if (!fetching && !data) {
+        return <div> Make a post! </div>
+    }
+
+
     return (
         <Layout>
+            <Flex>
             <NextLink href="/create-post">
-                <Button color='black'>Create Post</Button>
+                <Button ml='auto' color='black'>Create Post</Button>
             </NextLink>
+            </Flex>
         <br/>
-        <div> hello world !!</div>
-       {!data ? <div>Loading Posts ...</div>: data.posts.map(p => 
-                <div key={p._id}>
-                    {p.title}
-                </div>)
-                }
+
+       {!data && fetching ? (<div>Loading Posts ...</div>)
+       : (
+           <Stack spacing={10} >
+           {data!.posts.posts.map((p) => (
+                 <Box key={p._id} p={5}  shadow="md"
+                 borderWidth="1px">
+                 <Heading fontSize="xl">{p.title}</Heading>
+                 
+                 <Text mt={4}>{p.text.slice(0,50)+ "..."}</Text>
+               </Box>))}
+           </Stack>
+       )} 
+      {data && data.posts.hasMore ? (<Flex>
+       <Button onClick={() => {
+           setVariables({
+               limit: variables?.limit, 
+               cursor: data.posts.posts[data.posts.posts.length - 1].createdAt
+           });
+        }}
+           isLoading={fetching} my={8} m='auto'> Load more </Button>
+       </Flex>) : null}
+       
         </Layout>
 
 
