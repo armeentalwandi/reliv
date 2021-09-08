@@ -28,13 +28,14 @@ const main = async () => {
     username: 'postgres',
     password: 'postgres',
     logging: true,
-    synchronize: true,
+    synchronize: false,
     migrations: [path.join(__dirname, "./migrations/*")],
     entities: [Post, User, Updoot],
   });
   
   await conn.runMigrations();
  
+  await Post.delete({});
 
   const app = express();
   const RedisStore = connectRedis(session);

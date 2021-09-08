@@ -6,7 +6,13 @@ query Posts ($limit: Int!, $cursor: String) {
             createdAt
             updatedAt
             title
+            points
+            voteStatus
             text
+            creator{
+                username
+                _id
+            }
         }
 
     }
