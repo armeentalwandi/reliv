@@ -1,14 +1,19 @@
 import { NavBar } from "../components/NavBar";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { withUrqlClient} from 'next-urql'
-import { usePostsQuery } from "../generated/graphql";
+import { UpdatePostDocument, useMeQuery, usePostsQuery } from "../generated/graphql";
 import { Layout } from "../components/Layout";
 import NextLink from "next/link";
-import {Box, Button, Flex, Heading, Icon, Stack, Text} from '@chakra-ui/react';
+import {Box, Button, Flex, Heading, Stack, Text, Icon, IconButton, Link} from '@chakra-ui/react';
 import React, { useState } from "react";
+import { ChevronUpIcon, ChevronDownIcon, EditIcon} from "@chakra-ui/icons";
+import { UpdootSection } from "../components/UpdootSection";
+import { useUpdatePostMutation } from "../generated/graphql";
+import { EditButton } from "../components/EditButton";
 
 const Index = () => {
     const [variables, setVariables] = useState({limit: 15, cursor: null as null | string})
+    
     const [{data, fetching}] = usePostsQuery({
         variables,
     }); 
@@ -16,7 +21,7 @@ const Index = () => {
     if (!fetching && !data) {
         return <div> Make a post! </div>
     }
-
+  const [,updatePost] = useUpdatePostMutation();
 
     return (
         <Layout>
@@ -31,14 +36,25 @@ const Index = () => {
        : (
            <Stack spacing={10} >
            {data!.posts.posts.map((p) => (
-                 <Box key={p._id} p={5}  shadow="md"
+                 <Flex key={p._id} p={5}  shadow="md"
                  borderWidth="1px">
-                     <Icon name="chevron-up" size="24px"/>
-                     <Icon name="chevron-down" size="24px"/>
-                 <Heading fontSize="xl">{p.title}</Heading>
+                     <UpdootSection post={p}/>
+                     <Box>
+                         <NextLink href="/post/[id]" as={`/post/${p._id}`}>
+                             <Link> 
+                             <Heading fontSize="xl">{p.title}</Heading>
+                             </Link>
+                         </NextLink>
+                         
+                        <Text>posted by {p.creator.username}</Text>
+                         <Text mt={4}>{p.text.slice(0,50)+ "..."}</Text>
+                         </Box>
+                        <Box ml='auto'> 
+                        <EditButton _id = {p._id} creatorId={p.creator._id}/>
+                      </Box> 
+                    
                  
-                 <Text mt={4}>{p.text}</Text>
-               </Box>))}
+               </Flex>))}
            </Stack>
        )} 
       {data && data.posts.hasMore ? (<Flex>

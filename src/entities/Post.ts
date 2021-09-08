@@ -1,4 +1,4 @@
-import { ObjectType, Field } from "type-graphql";
+import { ObjectType, Field, Int } from "type-graphql";
 import { 
   Entity, 
   ManyToOne, 
@@ -31,6 +31,10 @@ export class Post extends BaseEntity {
   @Field()
   @Column({ type: "int", default: 0})
   points!: number; 
+
+  @Field(() => Int, { nullable: true})
+  voteStatus: number | null; // so voteStatus either gonna be 1, -1, or null
+  // 1 = upvooted it, -1 = downvooted it, or haven't voted yet on the post
 
   @Field()
   @Column()
