@@ -4,11 +4,13 @@ import Linker from "next/link";
 import { useLogoutMutation, useMeQuery } from '../generated/graphql';
 import isServer from '../utils/isServer';
 import NextLink from "next/link";
+import { useRouter } from 'next/router';
 
 
 interface NavBarProps {}
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
+    const router = useRouter();
     const [, logout] = useLogoutMutation();
     const [{data, fetching}] = useMeQuery();//me query gets user id and name so we can don't show login/register if user is logged in
 
@@ -37,7 +39,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         body = (
             <Flex>
          <Box fontSize='2xl' mr={4} fontStyle='italic'>Hi {data.me.username}!</Box> 
-        <Button onClick={() => {logout();}} variant='outline' color='black' bg='lightblue'>Logout</Button>
+        <Button onClick={async () => {await logout(); router.reload()}} variant='outline' color='black' bg='lightblue'>Logout</Button>
         </Flex>
 
         );
