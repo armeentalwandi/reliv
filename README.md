@@ -1,3 +1,5 @@
+![memories page](https://user-images.githubusercontent.com/58177161/132969857-ba656ec2-1029-4613-a391-7428acd3f51e.jpeg)
+![memories page](https://user-images.githubusercontent.com/58177161/132969860-6390cb67-963e-4d3d-a2ee-d9b1a15bbdb0.jpeg)
 # reliv
 Store your memories in one spot. This application is made for close friends who may live far from one another. Stay connected with your friends by sharing your day to day activities + memories so no matter where you are, you can stay updated!
 
@@ -36,7 +38,8 @@ If the user forgot their password, they could simply click on forgot password an
 #### All Memories Page with Like/Dislike Functionality and Cursor Based Pagination
 To share about their adventure, the user can click on Make A New Memory!
 Friends can like and dislike others' posts, and with the incorporation of session id, they are unable to dislike or like more than once. With session id tracking likes and dislikes, Reliv also handles edgecases such as skipping over to 0... 
-![memories page](https://user-images.githubusercontent.com/58177161/132969816-cd522a08-4a67-4130-9eb1-d23da25368df.png)
+![memories page](https://user-images.githubusercontent.com/58177161/132969872-783d8936-e970-410d-a988-85eb257f08c0.jpeg)
+
 
 <img width="600" alt="memories page with load more" src="https://user-images.githubusercontent.com/58177161/132969321-a4870102-38de-42b2-973a-bcff76ecb1a0.png" width="100" height="600">
 
