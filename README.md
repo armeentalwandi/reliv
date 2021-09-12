@@ -25,7 +25,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 ## Reliv in Action + Demo
 
 #### Registration Page
-<img width="500" alt="register" src="https://user-images.githubusercontent.com/58177161/132969219-28f610e6-06e8-4bdd-9916-10a6a27f84da.png" height="500">
+<img width="500" alt="register" src="https://user-images.githubusercontent.com/58177161/132969219-28f610e6-06e8-4bdd-9916-10a6a27f84da.png" height="700">
 
 
 
@@ -42,16 +42,16 @@ Friends can like and dislike others' posts, and with the incorporation of sessio
 
 #### Make a Memory Page 
 User can create a memory by clicking the top-right button and only can do so if they are logged in. 
-<img width="850" alt="make a memory button" src="https://user-images.githubusercontent.com/58177161/132969431-4b9dffc9-d5d7-4b78-9639-9690734a1b01.png">
-<img width="1300" alt="create a post" src="https://user-images.githubusercontent.com/58177161/132969432-1e4e00fc-d973-466e-9022-ecfd0d20fb2f.png">
-<img width="470" alt="cp post zoomed" src="https://user-images.githubusercontent.com/58177161/132969433-6e9045f1-d1b2-4158-b035-c8b51a504839.png">
+<img width="800" alt="make a memory button" src="https://user-images.githubusercontent.com/58177161/132969431-4b9dffc9-d5d7-4b78-9639-9690734a1b01.png">
+<img width="1000" alt="create a post" src="https://user-images.githubusercontent.com/58177161/132969432-1e4e00fc-d973-466e-9022-ecfd0d20fb2f.png">
+<img width="400" alt="cp post zoomed" src="https://user-images.githubusercontent.com/58177161/132969433-6e9045f1-d1b2-4158-b035-c8b51a504839.png">
 
 
 
 
 #### Edit a Memory Page
 Through the incorporation of session id in Reliv to monitor authorization, only creators of posts can edit their posts and not of others. As you can see, the option to edit only appears if it's their own post. 
-<img width="470" alt="updating a post" src="https://user-images.githubusercontent.com/58177161/132969441-636934d9-245e-482e-81bd-bfff433da8d8.png">
+<img width="400" alt="updating a post" src="https://user-images.githubusercontent.com/58177161/132969441-636934d9-245e-482e-81bd-bfff433da8d8.png">
 <img width="800" alt="cant edit posts not your own" src="https://user-images.githubusercontent.com/58177161/132969437-6d2de514-2081-4459-90b2-de08d2069c26.png">
 <img width="800" alt="can edit posts your own" src="https://user-images.githubusercontent.com/58177161/132969438-efdd6a6f-0b28-4aac-a226-181c06858ca8.png">
 
