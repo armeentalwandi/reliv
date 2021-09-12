@@ -20,7 +20,7 @@ Then, in the web directory, you can run:
 ### `npm run dev`
 
 This runs the React application in the development mode.\
-Open [http://localhost:3000(http://localhost:3000) to view it in the browser.
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Reliv in Action + Demo
 
