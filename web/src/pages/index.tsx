@@ -13,7 +13,7 @@ import { EditButton } from "../components/EditButton";
 import { Img } from "@chakra-ui/react"; 
 import Image from "next/image";
 import icecream from "./images/icecream.jpeg";
-import girlsfield from "./images/girlsfield.jpeg";
+import ball from "./images/ball.jpeg";
 import jumping from "./images/jumping.jpeg";
 import airplane from "./images/airplane.jpeg";
 import reading from "./images/reading.jpeg";
@@ -41,7 +41,7 @@ const Index = () => {
         <Layout>
             <Flex>
             <NextLink href="/create-post">
-                <Button ml='auto' color='black'>Create Post</Button>
+                <Button ml='auto' color='black'>Make a Memory!</Button>
             </NextLink>
             </Flex>
         <br/>
@@ -73,20 +73,20 @@ const Index = () => {
                     : p.title.includes("Nature") ? 
                     <Image id="require-static" src={jumping}  height="300px" width="300px"/>
                     
-                    : p.title.includes("beach") ? 
-                    <Image id="require-static" src={beach}  height="200px" width="200px"/>
+                    : p.title.includes("Beach") ? 
+                    <Image id="require-static" src={beach}  height="180px" width="200px"/>
                     
                     : p.title.includes("sun") ? 
-                    <Image id="require-static" src={sunset}  height="200px" width="200px"/>
+                    <Image id="require-static" src={sunset}  height="190px" width="250px"/>
                     
                     : p.title.includes("carnival") ? 
-                    <Image id="require-static" src={carnival}  height="150px" width="150px"/>
+                    <Image id="require-static" src={carnival}  height="180px" width="250px"/>
                
                     : p.title.includes("Flying") ? 
                     <Image id="require-static" src={airplane}  height="200px" width="200px"/>
                    
                     : p.title.includes("park") ? 
-                    <Image id="require-static" src={girlsfield}  height="100px" width="100px"/>
+                    <Image id="require-static" src={ball}  height="200px" width="250px"/>
                     
                     : p.title.includes("Reading") ? 
                     <Image id="require-static" src={reading}  height="100px" width="100px"/>
@@ -107,14 +107,14 @@ const Index = () => {
                </Flex>))}
            </Stack>
        )} 
-      {data && data.posts.hasMore ? (<Flex>
+      {data && data.posts.hasMore ? (<Flex marginTop={5} marginBottom={8}>
        <Button onClick={() => {
            setVariables({
                limit: variables.limit, 
                cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,
            });
         }}
-           isLoading={fetching} my={8} m='auto'> Load more </Button>
+           isLoading={fetching} m='auto'> Load more </Button>
        </Flex>) : null}
        
         </Layout>
