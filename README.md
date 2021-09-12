@@ -25,7 +25,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 ## Reliv in Action + Demo
 
 #### Registration Page
-<img width="517" alt="register" src="https://user-images.githubusercontent.com/58177161/132969219-28f610e6-06e8-4bdd-9916-10a6a27f84da.png" width="40" height="300">
+<img width="517" alt="register" src="https://user-images.githubusercontent.com/58177161/132969219-28f610e6-06e8-4bdd-9916-10a6a27f84da.png" height="500">
 
 
 
