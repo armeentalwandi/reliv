@@ -35,6 +35,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 If the user forgot their password, they could simply click on forgot password and input their email which will send them a link to reset password if the account is registered. Reliv also utilizes session id which recognizes the user and keeps track of the state of their application. 
 
 
+
 #### All Memories Page with Like/Dislike Functionality and Cursor Based Pagination
 To share about their adventure, the user can click on Make A New Memory!
 Friends can like and dislike others' posts, and with the incorporation of session id, they are unable to dislike or like more than once. With session id tracking likes and dislikes, Reliv also handles edgecases such as skipping over to 0... 
@@ -49,8 +50,6 @@ User can create a memory by clicking the top-right button and only can do so if 
 
 
 
-
-
 #### Edit a Memory Page
 <img width="400" alt="updating a post" src="https://user-images.githubusercontent.com/58177161/132969441-636934d9-245e-482e-81bd-bfff433da8d8.png">
 Through the incorporation of session id in Reliv to monitor authorization, only creators of posts can edit their posts and not of others. As you can see, the option to edit only appears if it's their own post. 
@@ -58,3 +57,8 @@ Through the incorporation of session id in Reliv to monitor authorization, only 
 
 
 #### Walk through/Demo
+
+
+https://user-images.githubusercontent.com/68311871/132971092-ecb53b9c-e054-45e7-9d18-2b27d34ac0a3.mp4
+
+
