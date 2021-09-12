@@ -45,7 +45,7 @@ Friends can like and dislike others' posts, and with the incorporation of sessio
 User can create a memory by clicking the top-right button and only can do so if they are logged in. 
 <img width="800" alt="make a memory button" src="https://user-images.githubusercontent.com/58177161/132969431-4b9dffc9-d5d7-4b78-9639-9690734a1b01.png">
 <img width="1000" alt="create a post" src="https://user-images.githubusercontent.com/58177161/132969432-1e4e00fc-d973-466e-9022-ecfd0d20fb2f.png">
-<img width="400" alt="cp post zoomed" src="https://user-images.githubusercontent.com/58177161/132969433-6e9045f1-d1b2-4158-b035-c8b51a504839.png">
+
 
 
 
