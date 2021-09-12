@@ -25,7 +25,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 ## Reliv in Action + Demo
 
 #### Registration Page
-<img width="517" alt="register" src="https://user-images.githubusercontent.com/58177161/132969219-28f610e6-06e8-4bdd-9916-10a6a27f84da.png">
+<img width="517" alt="register" src="https://user-images.githubusercontent.com/58177161/132969219-28f610e6-06e8-4bdd-9916-10a6a27f84da.png" width="40" height="60">
 
 
 
@@ -36,8 +36,8 @@ If the user forgot their password, they could simply click on forgot password an
 #### All Memories Page with Like/Dislike Functionality and Cursor Based Pagination
 To share about their adventure, the user can click on Make A New Memory!
 Friends can like and dislike others' posts, and with the incorporation of session id, they are unable to dislike or like more than once. With session id tracking likes and dislikes, Reliv also handles edgecases such as skipping over to 0... 
-<img width="1406" alt="memories page" src="https://user-images.githubusercontent.com/58177161/132969318-d02765e6-0b82-4f65-b525-715d4fbff283.png">
-<img width="1407" alt="memories page with load more" src="https://user-images.githubusercontent.com/58177161/132969321-a4870102-38de-42b2-973a-bcff76ecb1a0.png">
+<img width="1406" alt="memories page" src="https://user-images.githubusercontent.com/58177161/132969318-d02765e6-0b82-4f65-b525-715d4fbff283.png" width="100" height="80">
+<img width="1407" alt="memories page with load more" src="https://user-images.githubusercontent.com/58177161/132969321-a4870102-38de-42b2-973a-bcff76ecb1a0.png" width="100" height="80">
 
 
 #### Make a Memory Page 
