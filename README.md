@@ -41,8 +41,6 @@ Friends can like and dislike others' posts, and with the incorporation of sessio
 ![memories page](https://user-images.githubusercontent.com/58177161/132969872-783d8936-e970-410d-a988-85eb257f08c0.jpeg)
 
 
-<img width="600" alt="memories page with load more" src="https://user-images.githubusercontent.com/58177161/132969321-a4870102-38de-42b2-973a-bcff76ecb1a0.png" width="100" height="600">
-
 
 #### Make a Memory Page 
 User can create a memory by clicking the top-right button and only can do so if they are logged in. 
@@ -56,8 +54,6 @@ User can create a memory by clicking the top-right button and only can do so if 
 #### Edit a Memory Page
 Through the incorporation of session id in Reliv to monitor authorization, only creators of posts can edit their posts and not of others. As you can see, the option to edit only appears if it's their own post. 
 <img width="400" alt="updating a post" src="https://user-images.githubusercontent.com/58177161/132969441-636934d9-245e-482e-81bd-bfff433da8d8.png">
-<img width="800" alt="cant edit posts not your own" src="https://user-images.githubusercontent.com/58177161/132969437-6d2de514-2081-4459-90b2-de08d2069c26.png">
-<img width="800" alt="can edit posts your own" src="https://user-images.githubusercontent.com/58177161/132969438-efdd6a6f-0b28-4aac-a226-181c06858ca8.png">
 
 
 #### Walk through/Demo
