@@ -52,8 +52,9 @@ User can create a memory by clicking the top-right button and only can do so if 
 
 
 #### Edit a Memory Page
-Through the incorporation of session id in Reliv to monitor authorization, only creators of posts can edit their posts and not of others. As you can see, the option to edit only appears if it's their own post. 
 <img width="400" alt="updating a post" src="https://user-images.githubusercontent.com/58177161/132969441-636934d9-245e-482e-81bd-bfff433da8d8.png">
+Through the incorporation of session id in Reliv to monitor authorization, only creators of posts can edit their posts and not of others. As you can see, the option to edit only appears if it's their own post. 
+
 
 
 #### Walk through/Demo
