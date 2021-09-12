@@ -36,7 +36,8 @@ If the user forgot their password, they could simply click on forgot password an
 #### All Memories Page with Like/Dislike Functionality and Cursor Based Pagination
 To share about their adventure, the user can click on Make A New Memory!
 Friends can like and dislike others' posts, and with the incorporation of session id, they are unable to dislike or like more than once. With session id tracking likes and dislikes, Reliv also handles edgecases such as skipping over to 0... 
-<img width="600" alt="memories page" src="https://user-images.githubusercontent.com/58177161/132969318-d02765e6-0b82-4f65-b525-715d4fbff283.png" height="600">
+![memories page](https://user-images.githubusercontent.com/58177161/132969816-cd522a08-4a67-4130-9eb1-d23da25368df.png)
+
 <img width="600" alt="memories page with load more" src="https://user-images.githubusercontent.com/58177161/132969321-a4870102-38de-42b2-973a-bcff76ecb1a0.png" width="100" height="600">
 
 
