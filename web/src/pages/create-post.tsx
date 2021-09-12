@@ -38,7 +38,7 @@ const CreatePost: React.FC<{}> = ({}) => {
                     {/* <Box mt={4}>
                         <InputField name="photo" placeholder="Photo" type="File" label="Photo"/>
                     </Box> */}
-                    <Button mt={4} type="submit" isLoading={isSubmitting} colorScheme="blue">Create Post</Button>
+                    <Button mt={4} type="submit" isLoading={isSubmitting} colorScheme="blue">Make a Memory</Button>
                     
                 </Form>
 
